@@ -1,0 +1,31 @@
+version: '3'
+# name: kafka-group
+
+services:
+  zookeeper:
+    image: zookeeper
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper-data:/data
+      - zookeeper-data:/datalog
+      - zookeeper-data:/logs
+    container_name: zookeeper
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: "localhost"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LOG_DIRS: "/kafka/logs"
+    volumes:
+      - kafka-data:/kafka
+    depends_on:
+      - zookeeper
+    container_name: kafka
+
+volumes:
+  zookeeper-data: {}
+  kafka-data: {}
