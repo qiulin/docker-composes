@@ -17,8 +17,3 @@ services:
       - /data/gitea-runner:/data
       - /var/run/docker.sock:/var/run/docker.sock
     
-
-networks:
-  default:
-    external: true
-    name: proxy-internal
