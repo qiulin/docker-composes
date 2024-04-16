@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  runner:
+    image: gitea/act_runner:latest
+    container_name: gitea-runner
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: "${RUNNER_INSTANCE_URL}"
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${RUNNER_TOKEN}"
+      GITEA_RUNNER_NAME: "${RUNNER_NAME}"
+      GITEA_RUNNER_LABEL: "${RUNNER_LABEL}"
+    volumes:
+      - ./config.yaml:/config.yaml
+      - /data/gitea-runner:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    
+
+networks:
+  default:
+    external: true
+    name: proxy-internal

@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  server:
+    image: gitea/gitea:1.21.10
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    volumes:
+      - /data/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "2222:22"
+  runner:
+    image: gitea/act_runner:latest
+    container_name: gitea-runner
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: "${RUNNER_INSTANCE_URL}"
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${RUNNER_TOKEN}"
+      GITEA_RUNNER_NAME: "${RUNNER_NAME}"
+      GITEA_RUNNER_LABEL: "${RUNNER_LABEL}"
+    volumes:
+      - ./config.yaml:/config.yaml
+      - /data/gitea-runner:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  default:
+    external: true
+    name: proxy-internal
