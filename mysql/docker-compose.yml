@@ -1,0 +1,14 @@
+volumes:
+  mysql-data:
+
+
+services:
+  mysql-db:
+    image: mysql:8
+    container_name: "mysql-db-8"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
