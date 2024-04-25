@@ -2,37 +2,40 @@ version: '3.8'
 
 services:
   zitadel:
+    container_name: 'zitadel'
     restart: 'always'
-    networks:
-      - 'zitadel'
     image: 'ghcr.io/zitadel/zitadel:latest'
-    command: 'start-from-init --masterkey "MasterkeyNeedsToHave32Characters" --tlsMode disabled'
-    environment:
-      - 'ZITADEL_DATABASE_POSTGRES_HOST=db'
-      - 'ZITADEL_DATABASE_POSTGRES_PORT=5432'
-      - 'ZITADEL_DATABASE_POSTGRES_DATABASE=zitadel'
-      - 'ZITADEL_DATABASE_POSTGRES_USER_USERNAME=zitadel'
-      - 'ZITADEL_DATABASE_POSTGRES_USER_PASSWORD=zitadel'
-      - 'ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE=disable'
-      - 'ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME=postgres'
-      - 'ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD=postgres'
-      - 'ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE=disable'
-      - 'ZITADEL_EXTERNALSECURE=false'
+    command: 'start-from-init --config /zitadel-config.yaml --config /zitadel-secrets.yaml --steps /zitadel-init-steps.yaml --masterkey "${ZITADEL_MASTERKEY}" --tlsMode disabled'
+    # command: 'start-from-init --masterkey "390d271351494655b71af6c221924760" --tlsMode disabled'
+    # environment:
+    #   - 'ZITADEL_DATABASE_POSTGRES_HOST=db'
+    #   - 'ZITADEL_DATABASE_POSTGRES_PORT=5432'
+    #   - 'ZITADEL_DATABASE_POSTGRES_DATABASE=zitadel'
+    #   - 'ZITADEL_DATABASE_POSTGRES_USER_USERNAME=zitadel'
+    #   - 'ZITADEL_DATABASE_POSTGRES_USER_PASSWORD=zitadel'
+    #   - 'ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE=disable'
+    #   - 'ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME=postgres'
+    #   - 'ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD=postgres'
+    #   - 'ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE=disable'
+    #   - 'ZITADEL_EXTERNALSECURE=false'
     depends_on:
       db:
         condition: 'service_healthy'
     ports:
       - '8080:8080'
+    volumes:
+      - "./zitadel-config.yaml:/zitadel-config.yaml"
+      - "./zitadel-secrets.yaml:/zitadel-secrets.yaml"
+      - "./zitadel-init-steps.yaml:/zitadel-init-steps.yaml"
 
   db:
+    container_name: 'zitadel-postgres'
     restart: 'always'
     image: postgres:16-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=zitadel
-    networks:
-      - 'zitadel'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "-d", "zitadel", "-U", "postgres"]
       interval: '10s'
@@ -41,6 +44,10 @@ services:
       start_period: '20s'
     ports:
       - '5432:5432'
+    volumes:
+      - "/data/docker/zitadel-postgres:/var/lib/postgresql/data"
 
 networks:
-  zitadel:
+  default:
+    external: true
+    name: proxy-internal
