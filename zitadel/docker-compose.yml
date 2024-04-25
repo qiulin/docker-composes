@@ -5,7 +5,7 @@ services:
     container_name: 'zitadel'
     restart: 'always'
     image: 'ghcr.io/zitadel/zitadel:latest'
-    command: 'start-from-init --config /zitadel-config.yaml --config /zitadel-secrets.yaml --steps /zitadel-init-steps.yaml --masterkey "${ZITADEL_MASTERKEY}" --tlsMode disabled'
+    command: 'start-from-init --config /zitadel-config.yaml --config /zitadel-secrets.yaml --steps /zitadel-init-steps.yaml --masterkey "${ZITADEL_MASTERKEY}"'
     # command: 'start-from-init --masterkey "390d271351494655b71af6c221924760" --tlsMode disabled'
     # environment:
     #   - 'ZITADEL_DATABASE_POSTGRES_HOST=db'
