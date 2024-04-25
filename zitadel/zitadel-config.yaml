@@ -3,7 +3,7 @@ Log:
   Level: 'info'
 
 # Make ZITADEL accessible over HTTP, not HTTPS
-ExternalSecure: false
+ExternalSecure: true
 
 ExternalDomain: 'auth.weflux.tech' # ZITADEL_EXTERNALDOMAIN
 
