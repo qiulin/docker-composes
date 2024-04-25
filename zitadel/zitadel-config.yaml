@@ -2,6 +2,10 @@
 Log:
   Level: 'info'
 
+# ExternalPort is the port on which end users access ZITADEL.
+# It can differ from Port e.g. if a reverse proxy forwards the traffic to ZITADEL
+# Read more about external access: https://zitadel.com/docs/self-hosting/manage/custom-domain
+ExternalPort: 443 # ZITADEL_EXTERNALPORT
 # Make ZITADEL accessible over HTTP, not HTTPS
 ExternalSecure: true
 
