@@ -5,6 +5,8 @@ Log:
 # Make ZITADEL accessible over HTTP, not HTTPS
 ExternalSecure: false
 
+ExternalDomain: 'auth.weflux.tech' # ZITADEL_EXTERNALDOMAIN
+
 # If not using the docker compose example, adjust these values for connecting ZITADEL to your PostgreSQL
 Database:
   postgres:
