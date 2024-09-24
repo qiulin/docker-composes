@@ -27,6 +27,7 @@ services:
       - "./zitadel-config.yaml:/zitadel-config.yaml"
       - "./zitadel-secrets.yaml:/zitadel-secrets.yaml"
       - "./zitadel-init-steps.yaml:/zitadel-init-steps.yaml"
+      - "/etc/lcoaltime:/etc/localtime"
 
   db:
     container_name: 'zitadel-postgres'
@@ -46,6 +47,7 @@ services:
       - '5432:5432'
     volumes:
       - "/data/docker/zitadel-postgres:/var/lib/postgresql/data"
+      - "/etc/lcoaltime:/etc/localtime"
 
 networks:
   default:
